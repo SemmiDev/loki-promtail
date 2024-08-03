@@ -1,0 +1,21 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 9095
+
+# menentukan lokasi file posisi yang digunakan oleh Promtail untuk melacak posisi terakhir yang dibaca dari setiap file log
+positions:
+  filename: /var/log/promtail/positions.yaml
+
+# menentukan konfigurasi klien Promtail yang digunakan untuk mengirimkan log ke Loki
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+# menentukan konfigurasi scrape yang digunakan oleh Promtail untuk mengumpulkan log dari file log
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*.log
